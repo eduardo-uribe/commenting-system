@@ -14,7 +14,7 @@ export default function DashboardNavigation({
   comments: Record<string, any>[] | undefined;
   firstname: string;
   threads: Record<string, any>[] | undefined;
-  websiteId: string | undefined;
+  websiteId: string;
 }) {
   const [moderationSelected, setModerationSelected] = useState(true);
 
