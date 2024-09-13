@@ -22,7 +22,7 @@ async function readRegisteredWebsites(userId: string) {
 }
 
 // Read all comments that have yet to be approved
-async function readComments(websiteId: string) {
+async function readComments(websiteId: number) {
   const sql = neon(process.env.DATABASE_URL!);
   const result = await sql(
     `SELECT
@@ -85,7 +85,7 @@ export default async function Page({
   let websiteId;
 
   if (searchParams?.url) {
-    comments = await readComments(searchParams?.url);
+    comments = await readComments(Number(searchParams?.url));
     threads = await readThreads(searchParams?.url);
     websiteId = searchParams?.url;
   }
