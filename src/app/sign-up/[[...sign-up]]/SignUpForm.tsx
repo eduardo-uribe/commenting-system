@@ -13,8 +13,13 @@ function SignUpForm({ setVerifying }: Props) {
   const { isLoaded, signUp } = useSignUp();
   const stripe = useStripe();
   const elements = useElements();
-  const priceId = process.env.STRIPE_SUBSCRIPTION_ESSENTIALS_PRICE_ID!;
+  const priceId =
+    process.env.NEXT_PUBLIC_STRIPE_SUBSCRIPTION_ESSENTIALS_PRICE_ID;
   const [email, setEmail] = useState('');
+
+  // development mode
+  console.log('PRICE ID:');
+  console.log(priceId);
 
   // 👉 Handles the sign-up process, including storing the card token and price id into the users metadata
   async function onSubmit(event: React.FormEvent) {
@@ -88,6 +93,7 @@ function SignUpForm({ setVerifying }: Props) {
             id='essential'
             className='mr-1'
             value={priceId}
+            readOnly
             checked
           />
           <label htmlFor='essential' className='text-sm'>

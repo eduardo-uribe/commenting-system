@@ -6,7 +6,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 const handler = createWebhooksHandler({
   onUserCreated: async (user) => {
-    console.log('CLERK WEB HOOK INVOKED');
     // 👉 Parse the unsafe_metadata from the user payload
     const { cardToken, priceId } = user.unsafe_metadata;
     if (!cardToken || !priceId) {
