@@ -12,7 +12,6 @@ function VerificationForm() {
   async function handleVerification(e: React.FormEvent) {
     e.preventDefault();
 
-    console.log('IN HANDLE VERIFICATION FUNCTION');
     if (!isLoaded && !signUp) return null;
 
     try {

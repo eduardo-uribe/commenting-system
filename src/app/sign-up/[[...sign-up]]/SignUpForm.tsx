@@ -17,10 +17,6 @@ function SignUpForm({ setVerifying }: Props) {
     process.env.NEXT_PUBLIC_STRIPE_SUBSCRIPTION_ESSENTIALS_PRICE_ID;
   const [email, setEmail] = useState('');
 
-  // development mode
-  console.log('PRICE ID:');
-  console.log(priceId);
-
   // 👉 Handles the sign-up process, including storing the card token and price id into the users metadata
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
