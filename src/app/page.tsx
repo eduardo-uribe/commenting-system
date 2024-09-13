@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Page() {
   return (
-    <main className='max-w-[52ch] m-auto pt-24'>
+    <main className='max-w-[52ch] m-auto pt-24 mb-24'>
       <p>Commenting System</p>
       <ul className='pt-2 flex'>
         <li>
@@ -26,6 +26,16 @@ export default function Page() {
       <Thread />
 
       {/* <h2 className='font-medium'>Bare and functional moderation dashboard</h2> */}
+      <h2 className=''>Have questions?</h2>
+      <p className='text-[#8C8C8D] inline-block'>
+        We might have answers, email us at {''}
+        <a
+          href='mailto:suppor@commentingsystem.com'
+          className='text-indigo-800 underline underline-offset-4'
+        >
+          support@commentingsystem.com
+        </a>
+      </p>
     </main>
   );
 }
