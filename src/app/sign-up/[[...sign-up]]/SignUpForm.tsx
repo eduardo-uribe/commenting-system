@@ -1,4 +1,5 @@
 'use client';
+
 import Link from 'next/link';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useSignUp } from '@clerk/nextjs';
@@ -12,8 +13,7 @@ function SignUpForm({ setVerifying }: Props) {
   const { isLoaded, signUp } = useSignUp();
   const stripe = useStripe();
   const elements = useElements();
-  // const [priceId, setPriceId] = useState('');
-  const priceId = 'price_1PxsenIa6rbutK1s6uRRhCHG';
+  const priceId = process.env.STRIPE_SUBSCRIPTION_ESSENTIALS_PRICE_ID!;
   const [email, setEmail] = useState('');
 
   // 👉 Handles the sign-up process, including storing the card token and price id into the users metadata
