@@ -52,7 +52,7 @@ async function readComments(websiteId: string) {
   return result;
 }
 
-async function readThreads(websiteId: number) {
+async function readThreads(websiteId: string) {
   const sql = neon(process.env.DATABASE_URL!);
 
   try {
@@ -86,7 +86,7 @@ export default async function Page({
 
   if (searchParams?.url) {
     comments = await readComments(searchParams?.url);
-    threads = await readThreads(Number(searchParams?.url));
+    threads = await readThreads(searchParams?.url);
     websiteId = searchParams?.url;
   }
 
