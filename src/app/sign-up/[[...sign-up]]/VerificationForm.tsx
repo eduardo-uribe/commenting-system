@@ -1,17 +1,6 @@
 import * as React from 'react';
 import { useSignUp } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 
 function VerificationForm() {
@@ -50,35 +39,35 @@ function VerificationForm() {
   }
 
   return (
-    <div className='mt-20 flex items-center justify-center'>
-      <form onSubmit={handleVerification}>
-        <Card className='w-full sm:w-96'>
-          <CardHeader>
-            <CardTitle>Create your account</CardTitle>
-            <CardDescription>
-              Welcome! Please fill in the details to get started.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className='grid gap-y-4'>
-            <div>
-              <Label htmlFor='code'>Enter your verification code</Label>
-              <Input
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                id='code'
-                name='code'
-                required
-              />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <div className='grid w-full gap-y-4'>
-              <Button type='submit' disabled={!isLoaded}>
-                Verify
-              </Button>
-            </div>
-          </CardFooter>
-        </Card>
+    <div className='mt-20 w-[42ch] m-auto'>
+      <h1 className='mb-4'>Commenting System</h1>
+      <form onSubmit={handleVerification} className='border rounded p-3'>
+        <h1 className='text-sm font-medium mb-1'>
+          Quickly confirm it&lsquo;s you
+        </h1>
+        <p className='text-sm mb-6 text-[#8C8C8D]'>
+          We emailed you a one-time password to confirm it&lsquo;s you creating
+          an account
+        </p>
+        <label htmlFor='code' className='block text-sm font-medium'>
+          Enter your verification code
+        </label>
+        <input
+          type='text'
+          name='code'
+          id='code'
+          required
+          value={code}
+          onChange={(event) => setCode(event.target.value)}
+          className='block border rounded w-full p-2 text-sm mb-2 mt-1'
+        />
+        <button
+          type='submit'
+          disabled={!isLoaded}
+          className='w-full bg-black text-white p-2 rounded text-sm'
+        >
+          Verify
+        </button>
       </form>
     </div>
   );

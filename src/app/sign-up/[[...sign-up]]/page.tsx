@@ -27,7 +27,7 @@ export default function Page() {
 
   // 👉 Render the signup form by default
   return (
-    <div className='mt-20 flex items-center justify-center'>
+    <div className='mt-20 w-[42ch] m-auto'>
       {/* @ts-ignore */}
       <Elements options={options} stripe={stripePromise}>
         <SignUpForm setVerifying={setVerifying} />

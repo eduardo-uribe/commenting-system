@@ -1,6 +1,5 @@
 'use client';
 
-// import { Icons } from '@/components/ui/icons';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
@@ -18,8 +17,6 @@ function AfterSignUp() {
   // 👉 Poll the user data until a stripeSubscriptionId is available
   useEffect(() => {
     async function init() {
-      console.log('INSIDE THE USE EFFECT HOOK'); // development mode
-      console.log(user?.publicMetadata.stripeSubscriptionId); // development mode
       while (!user?.publicMetadata?.stripeSubscriptionId) {
         await sleep(2000);
         await user?.reload();
@@ -33,9 +30,7 @@ function AfterSignUp() {
 
   return (
     <div className='mt-20 flex items-center justify-center'>
-      {/* <Icons.spinner className='size-8 animate-spin' /> */}
-      <p>Page: /after-sign-up</p>
-      <p>Loading</p>
+      <p>Your commenting system account is being created.</p>
     </div>
   );
 }

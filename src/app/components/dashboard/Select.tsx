@@ -11,11 +11,11 @@ export function Select({
   const { replace } = useRouter();
 
   function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    const website_url = event.target.value;
+    const websiteId = event.target.value;
     const params = new URLSearchParams(searchParams);
 
-    if (website_url) {
-      params.set('url', website_url);
+    if (websiteId) {
+      params.set('url', websiteId);
     } else {
       params.delete('url');
     }
@@ -25,22 +25,21 @@ export function Select({
 
   return (
     <>
-      <label htmlFor='domain-select' className='block mt-4 mr-4'>
-        Select a dashboard:
-      </label>
       <select
         name='domains'
         id='domain-select'
-        className='mt-1 py-1 px-2 rounded-sm font-sans'
+        className='mt-1 p-2 border rounded font-sans bg-transparent'
         onChange={handleChange}
       >
-        <option value=''>Select a dashboard</option>
+        <option value='' className='font-sans bg-transparent'>
+          Select your website
+        </option>
         {registered_websites.map((website) => {
           return (
             <option
-              value={website.website_url}
+              value={website.website_id}
               key={website.website_id}
-              className='font-sans'
+              className='font-sans bg-transparent'
             >
               {website.website_url}
             </option>

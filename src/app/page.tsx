@@ -4,7 +4,7 @@ export default function Page() {
   return (
     <main className='max-w-[52ch] m-auto pt-24'>
       <p>Commenting System</p>
-      {/* <ul className='pt-2 flex'>
+      <ul className='pt-2 flex'>
         <li>
           <Link href='/sign-in' className='mr-4 text-gray-500 text-sm'>
             Sign in
@@ -17,10 +17,10 @@ export default function Page() {
             </button>
           </Link>
         </li>
-      </ul> */}
+      </ul>
       <p className='mt-1 text-[#8C8C8D]'>
-        Allow your audience to share feedback, ask questions, and participate in
-        discussions with a commenting system.
+        Encourage your audience to share feedback, ask questions, and
+        participate in discussions with a commenting system.
       </p>
 
       <Thread />

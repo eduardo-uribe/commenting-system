@@ -1,20 +1,8 @@
 'use client';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useSignUp } from '@clerk/nextjs';
 import { useState } from 'react';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 type Props = {
   setVerifying: (val: boolean) => void;
@@ -24,7 +12,8 @@ function SignUpForm({ setVerifying }: Props) {
   const { isLoaded, signUp } = useSignUp();
   const stripe = useStripe();
   const elements = useElements();
-  const [priceId, setPriceId] = useState('');
+  // const [priceId, setPriceId] = useState('');
+  const priceId = 'price_1PxsenIa6rbutK1s6uRRhCHG';
   const [email, setEmail] = useState('');
 
   // 👉 Handles the sign-up process, including storing the card token and price id into the users metadata
@@ -65,73 +54,66 @@ function SignUpForm({ setVerifying }: Props) {
   }
 
   return (
-    <form onSubmit={onSubmit}>
-      <Card className='w-full sm:w-96'>
-        <CardHeader>
-          <CardTitle>Create your account</CardTitle>
-          <CardDescription>
-            Welcome! Please fill in the details to get started.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className='grid gap-y-4'>
-          {/* // 👉  Email input */}
-          <div>
-            <Label htmlFor='emailAddress'>Email address</Label>
-            <Input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              type='email'
-              id='emailAddress'
-              name='emailAddress'
-              required
-            />
-          </div>
+    <>
+      <h1 className='mb-4'>Commenting System</h1>
+      <form onSubmit={onSubmit} className='border rounded p-3'>
+        <h2 className='font-medium text-sm mb-1'>Create an account</h2>
+        <p className='text-sm mb-4 text-[#8C8C8D]'>
+          Encourage your audience to share feedback, ask questions, and
+          participate in discussions with a commenting system.
+        </p>
+        {/* // 👉  Email input */}
+        <div>
+          <label htmlFor='emailAddress' className='text-sm font-medium'>
+            Email address
+          </label>
+          <input
+            type='email'
+            name='emailAddress'
+            id='emailAddress'
+            required
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            className='border rounded p-2 text-sm w-full mt-1 mb-4'
+          />
+        </div>
 
-          {/* // 👉 Product selection radio group */}
-          <div>
-            <Label>Select tier</Label>
-            <RadioGroup
-              defaultValue='option-one'
-              className='mt-2'
-              value={priceId}
-              onValueChange={(e) => setPriceId(e)}
-            >
-              <div className='flex items-center space-x-2'>
-                <RadioGroupItem
-                  value='price_1PuN1GIa6rbutK1s1j9Zp69x'
-                  id='option-one'
-                />
-                <Label htmlFor='option-one'>Essentials</Label>
-              </div>
-              {/* <div className='flex items-center space-x-2'>
-                <RadioGroupItem
-                  value='price_1PG1UwF35z7flJq7vRUrnOiv'
-                  id='option-two'
-                />
-                <Label htmlFor='option-two'>Enterprise</Label>
-              </div> */}
-            </RadioGroup>
-          </div>
+        {/* // 👉 Product selection radio group */}
+        <div>
+          {/* <Label>Select tier</Label> */}
+          <h3 className='text-sm font-medium'>Select tier</h3>
+          <input
+            type='radio'
+            name='essential'
+            id='essential'
+            className='mr-1'
+            value={priceId}
+            checked
+          />
+          <label htmlFor='essential' className='text-sm'>
+            Essentials $10/mo
+          </label>
+        </div>
 
-          {/* // 👉 Use Stripe Elements to render the card capture form */}
-          <Label>Payment details</Label>
-          <div className='rounded border p-2'>
-            <CardElement />
-          </div>
-        </CardContent>
-
-        <CardFooter>
-          <div className='grid w-full gap-y-4'>
-            <Button type='submit' disabled={!isLoaded}>
-              Sign up for trial
-            </Button>
-            <Button variant='link' size='sm' asChild>
-              <Link href='/sign-in'>Already have an account? Sign in</Link>
-            </Button>
-          </div>
-        </CardFooter>
-      </Card>
-    </form>
+        {/* // 👉 Use Stripe Elements to render the card capture form */}
+        <h3 className='text-sm font-medium mt-4 mb-2'>Payment details</h3>
+        <div className='rounded border p-2 mb-4'>
+          <CardElement />
+        </div>
+        <div>
+          <button
+            type='submit'
+            disabled={!isLoaded}
+            className='block bg-black text-white rounded font-normal text-sm py-2 w-full mt-6'
+          >
+            Sign up for a 14-day free trial
+          </button>
+          <button className='block text-xs font-medium hover:underline hover:underline-offset-4 w-full mt-4'>
+            <Link href='/sign-in'>Already have an account? Sign in</Link>
+          </button>
+        </div>
+      </form>
+    </>
   );
 }
 

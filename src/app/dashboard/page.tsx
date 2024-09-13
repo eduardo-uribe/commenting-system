@@ -1,12 +1,14 @@
-import { SignOutButton } from '@clerk/nextjs';
 import React, { ReactNode } from 'react';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import { auth } from '@clerk/nextjs/server';
+import { auth, currentUser } from '@clerk/nextjs/server';
 import { neon } from '@neondatabase/serverless';
 
+import Link from 'next/link';
 import { Select } from '../components/dashboard/Select';
+import Navigation from '../components/dashboard/Navigation';
+import DashboardNavigation from '../components/dashboard/DashboardNavigation';
+import Modal from '../components/dashboard/Modal';
 
 // get customers registered websites
 async function readRegisteredWebsites(userId: string) {
@@ -20,10 +22,17 @@ async function readRegisteredWebsites(userId: string) {
 }
 
 // Read all comments that have yet to be approved
-async function readUnapprovedComments(websiteURL: string) {
+async function readComments(websiteId: string) {
   const sql = neon(process.env.DATABASE_URL!);
   const result = await sql(
-    `SELECT *
+    `SELECT
+      comment_id,
+      comment_author,
+      comment_parent_id,
+      comment_thread_id,
+      comment_content,
+      TO_CHAR(comment_date_created, 'Day,Month FMDD YYYY') AS comment_date_created,
+      TO_CHAR(comment_date_updated, 'Day,Month FMDD YYYY') AS comment_date_updated
     FROM comment
     WHERE comment_thread_id IN (
       SELECT thread_id
@@ -31,13 +40,31 @@ async function readUnapprovedComments(websiteURL: string) {
       WHERE thread_owner_id = (
         SELECT website_id
         FROM website
-        WHERE website_url = $1
+        WHERE website_id = $1
       )
-    );`,
-    [websiteURL]
+    ) 
+    AND comment_accepted = FALSE
+    ORDER BY comment_date_created DESC
+      ;`,
+    [websiteId]
   );
 
   return result;
+}
+
+async function readThreads(websiteId: number) {
+  const sql = neon(process.env.DATABASE_URL!);
+
+  try {
+    const result = await sql(
+      `SELECT * FROM thread WHERE thread_owner_id = ($1) ORDER BY thread_date_created DESC`,
+      [websiteId]
+    );
+
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export default async function Page({
@@ -48,97 +75,38 @@ export default async function Page({
   const { userId }: { userId: string | null } = auth();
   if (!userId) redirect('/sign-in');
 
+  // persons first name
+  const user = await currentUser();
+  const firstname = user?.firstName || 'Internet stranger';
+
   let registered_websites = await readRegisteredWebsites(userId);
-  let unapproved_comments;
+  let comments;
+  let threads;
+  let websiteId;
 
   if (searchParams?.url) {
-    unapproved_comments = await readUnapprovedComments(searchParams?.url);
+    comments = await readComments(searchParams?.url);
+    threads = await readThreads(Number(searchParams?.url));
+    websiteId = searchParams?.url;
   }
 
   let selectedModerationDashboard = searchParams?.url || false;
 
   return (
-    <main className='max-w-[62ch] m-auto pt-24'>
+    <main className='max-w-[52ch] m-auto pt-24'>
       <Navigation />
-      <Link
-        href='/dashboard/create-a-new-dashboard'
-        className='block mt-8 text-indigo-700 underline'
-      >
-        Create a new dashboard
-      </Link>
+
+      <h2 className='mt-28'>Dashboard</h2>
       <Select registered_websites={registered_websites} />
 
       {selectedModerationDashboard && (
-        <ModerationDashboard comments={unapproved_comments!} />
+        <DashboardNavigation
+          comments={comments!}
+          firstname={firstname}
+          threads={threads!}
+          websiteId={websiteId!}
+        />
       )}
     </main>
-  );
-}
-
-function Navigation() {
-  return (
-    <nav>
-      <p>Comment System</p>
-      <ul className='flex mt-2'>
-        <li className='mr-4'>
-          <Link href='#' className='underline'>
-            Documentation
-          </Link>
-        </li>
-        <li>
-          <SignOutButton>Sign out</SignOutButton>
-        </li>
-      </ul>
-    </nav>
-  );
-}
-
-function ModerationDashboard({
-  comments,
-}: {
-  comments: Record<string, any>[];
-}) {
-  return (
-    <section id='comment-system' className='mt-28 border rounded p-2'>
-      <h1>Moderation Dashboard</h1>
-      <p>
-        New comments <span className='self-center mx-2'>&#8226;</span>{' '}
-        {comments.length}
-      </p>
-
-      <ul className='list-none mt-8 p-0 border-l-[1px] border-[#eee]'>
-        {comments.map((comment) => {
-          return (
-            <li
-              className='pl-3 [&:not(:first-child)]:mt-12'
-              key={comment.comment_id}
-            >
-              <article className='comment'>
-                <div className='flex'>
-                  <p className='mr-4'>{comment.comment_author_id}</p>
-                  <span className='block self-center mr-4 text-[#c3c3c3]'>
-                    &#8226;
-                  </span>
-                  <time className='self-end text-[#c0c0c0]'>
-                    {/* {comment.comment_date_created} */}
-                    Hard coded date.
-                  </time>
-                </div>
-                <p className='mt-2 leading-6'>{comment.comment_content}</p>
-                <button className='border-none bg-[#eee] mt-4 mr-4 py-1 px-3 text-sm'>
-                  Reply
-                </button>
-                <button className='border-none bg-[#eee] mt-4 mr-4 py-1 px-3 text-sm'>
-                  Accept
-                </button>
-                <button className='border-none bg-[#eee] mt-4 py-1 px-3 text-sm'>
-                  Delete
-                </button>
-              </article>
-            </li>
-          );
-        })}
-      </ul>
-    </section>
   );
 }
