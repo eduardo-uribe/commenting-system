@@ -4,7 +4,7 @@ export default function ModerationDashboard({
   comments,
   firstname,
 }: {
-  comments: Record<string, any>[];
+  comments: Record<string, any>[] | undefined;
   firstname: string;
 }) {
   return (
@@ -12,10 +12,10 @@ export default function ModerationDashboard({
       <h1>Moderation dashboard</h1>
       <p>
         New comments <span className='self-center mx-2'>&#8226;</span>{' '}
-        {comments.length}
+        {comments && comments.length}
       </p>
 
-      {comments.length > 0 && (
+      {comments && comments.length > 0 && (
         <ul className='list-none mt-8 p-0 border-l-[1px] border-[#eee]'>
           {comments.map((comment) => {
             return (

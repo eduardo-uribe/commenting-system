@@ -11,10 +11,10 @@ export default function DashboardNavigation({
   threads,
   websiteId,
 }: {
-  comments: Record<string, any>[];
+  comments: Record<string, any>[] | undefined;
   firstname: string;
-  threads: Record<string, any>[];
-  websiteId: string;
+  threads: Record<string, any>[] | undefined;
+  websiteId: string | undefined;
 }) {
   const [moderationSelected, setModerationSelected] = useState(true);
 

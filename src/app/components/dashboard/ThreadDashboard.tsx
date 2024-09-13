@@ -6,7 +6,7 @@ export default function ThreadDashboard({
   threads,
   websiteId,
 }: {
-  threads: Record<string, any>[];
+  threads: Record<string, any>[] | undefined;
   websiteId: string;
 }) {
   return (
@@ -23,10 +23,10 @@ export default function ThreadDashboard({
 
       <p>
         Threads <span className='self-center mx-2'>&#8226;</span>
-        {threads.length}
+        {threads && threads.length}
       </p>
 
-      {threads.length > 0 && (
+      {threads && threads.length > 0 && (
         <ul className='list-none mt-8 p-0' id='thread-section'>
           {threads.map((thread) => {
             return (

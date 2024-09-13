@@ -22,7 +22,7 @@ async function readRegisteredWebsites(userId: string) {
 }
 
 // Read all comments that have yet to be approved
-async function readComments(websiteId: number) {
+async function readComments(websiteId: string) {
   const sql = neon(process.env.DATABASE_URL!);
   const result = await sql(
     `SELECT
@@ -67,6 +67,68 @@ async function readThreads(websiteId: string) {
   }
 }
 
+// first check if any threads exists for the provided website id
+async function hasThreads(websiteId: string): Promise<boolean> {
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+
+    const result = await sql(
+      `SELECT EXISTS (SELECT 1 FROM thread WHERE thread_owner_id = ($1))`,
+      [websiteId]
+    );
+
+    const boolean = result[0].exists;
+
+    return boolean;
+  } catch (error) {
+    console.log(error);
+  }
+
+  // if the try/catch fails return false by default
+  return false;
+}
+
+async function hasComments(websiteId: string): Promise<boolean> {
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+
+    const result = await sql(
+      `SELECT EXISTS (
+        SELECT
+          comment_id,
+          comment_author,
+          comment_parent_id,
+          comment_thread_id,
+          comment_content,
+          TO_CHAR(comment_date_created, 'Day,Month FMDD YYYY') AS comment_date_created,
+          TO_CHAR(comment_date_updated, 'Day,Month FMDD YYYY') AS comment_date_updated
+        FROM comment
+        WHERE comment_thread_id IN (
+          SELECT thread_id
+          FROM thread
+          WHERE thread_owner_id::int = (
+            SELECT website_id
+            FROM website
+            WHERE website_id = ($1)
+          )
+        ) 
+        AND comment_accepted = FALSE
+        ORDER BY comment_date_created DESC
+        );`,
+      [websiteId]
+    );
+
+    const boolean = result[0].exists;
+
+    return boolean;
+  } catch (error) {
+    console.log(error);
+  }
+
+  // if the try/catch fails return false by default
+  return false;
+}
+
 export default async function Page({
   searchParams,
 }: {
@@ -85,9 +147,19 @@ export default async function Page({
   let websiteId;
 
   if (searchParams?.url) {
-    comments = await readComments(Number(searchParams?.url));
-    threads = await readThreads(searchParams?.url);
+    // comments = await readComments(Number(searchParams?.url));
     websiteId = searchParams?.url;
+
+    const websiteHasThreads = await hasThreads(websiteId);
+    const websiteHasComments = await hasComments(websiteId);
+
+    if (websiteHasThreads) {
+      threads = await readThreads(websiteId);
+    }
+
+    if (websiteHasComments) {
+      comments = await readComments(websiteId);
+    }
   }
 
   let selectedModerationDashboard = searchParams?.url || false;
@@ -101,9 +173,9 @@ export default async function Page({
 
       {selectedModerationDashboard && (
         <DashboardNavigation
-          comments={comments!}
+          comments={comments}
           firstname={firstname}
-          threads={threads!}
+          threads={threads}
           websiteId={websiteId!}
         />
       )}
