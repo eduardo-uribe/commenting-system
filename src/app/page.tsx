@@ -13,12 +13,12 @@ export default function Page() {
         <li>
           <Link href='/sign-up'>
             <button className='py-1 px-2 bg-[#EEE] text-gray-950 rounded text-sm'>
-              Sign up
+              Start your 14-day free trial
             </button>
           </Link>
         </li>
       </ul>
-      <p className='mt-1 text-[#8C8C8D]'>
+      <p className='mt-12 text-[#8C8C8D]'>
         Encourage your audience to share feedback, ask questions, and
         participate in discussions with a commenting system.
       </p>
@@ -34,7 +34,7 @@ function Thread() {
   return (
     <section
       id='comment-system'
-      className='mt-12 border border-[#eee] rounded-sm p-4 mb-12'
+      className='mt-8 border border-[#eee] rounded-sm p-4 mb-12'
     >
       <h1 className='mb-4'>
         Comments <span className='self-center mx-2'>&#8226;</span> 17
