@@ -37,7 +37,7 @@ async function readComments(websiteId: string) {
     WHERE comment_thread_id IN (
       SELECT thread_id
       FROM thread
-      WHERE thread_owner_id = (
+      WHERE thread_owner_id::int = (
         SELECT website_id
         FROM website
         WHERE website_id = $1
