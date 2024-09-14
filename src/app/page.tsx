@@ -19,8 +19,7 @@ export default function Page() {
         </li>
       </ul>
       <p className='mt-12 text-[#8C8C8D]'>
-        Encourage your audience to share feedback, ask questions, and
-        participate in discussions with a commenting system.
+        Encourage feedback, questions, and discussion with a commenting system.
       </p>
 
       <Thread />
