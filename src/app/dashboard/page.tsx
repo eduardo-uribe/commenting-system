@@ -94,14 +94,7 @@ async function hasComments(websiteId: string): Promise<boolean> {
 
     const result = await sql(
       `SELECT EXISTS (
-        SELECT
-          comment_id,
-          comment_author,
-          comment_parent_id,
-          comment_thread_id,
-          comment_content,
-          TO_CHAR(comment_date_created, 'Day,Month FMDD YYYY') AS comment_date_created,
-          TO_CHAR(comment_date_updated, 'Day,Month FMDD YYYY') AS comment_date_updated
+        SELECT *
         FROM comment
         WHERE comment_thread_id IN (
           SELECT thread_id
@@ -109,11 +102,10 @@ async function hasComments(websiteId: string): Promise<boolean> {
           WHERE thread_owner_id::int = (
             SELECT website_id
             FROM website
-            WHERE website_id = ($1)
+            WHERE website.website_id = ($1)
           )
         ) 
         AND comment_accepted = FALSE
-        ORDER BY comment_date_created DESC
         );`,
       [websiteId]
     );
@@ -147,7 +139,6 @@ export default async function Page({
   let websiteId;
 
   if (searchParams?.url) {
-    // comments = await readComments(Number(searchParams?.url));
     websiteId = searchParams?.url;
 
     const websiteHasThreads = await hasThreads(websiteId);
