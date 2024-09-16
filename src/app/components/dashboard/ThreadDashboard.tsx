@@ -1,6 +1,7 @@
 'use client';
 
 import { createThread } from '@/actions/dashboard';
+import Link from 'next/link';
 
 export default function ThreadDashboard({
   threads,
@@ -32,10 +33,16 @@ export default function ThreadDashboard({
             return (
               <li
                 key={thread.thread_id}
-                className='border rounded py-1 px-2 mb-2'
+                className='border rounded py-1 px-2 mb-2 flex'
               >
                 <p className='mr-6'>Id: {thread.thread_id}</p>
                 <p className='mr-2'>Name: {thread.thread_name}</p>
+                <Link
+                  href={`/dashboard/thread/${thread.thread_id}`}
+                  className='underline underline-offset-2'
+                >
+                  Edit
+                </Link>
               </li>
             );
           })}

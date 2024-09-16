@@ -2,10 +2,12 @@
 
 import * as React from 'react';
 import { useState } from 'react';
+
 import SignUpForm from './SignUpForm';
+import VerificationForm from './VerificationForm';
+
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import VerificationForm from './VerificationForm';
 
 export default function Page() {
   const [verifying, setVerifying] = useState(false);

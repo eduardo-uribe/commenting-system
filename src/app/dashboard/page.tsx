@@ -126,6 +126,7 @@ export default async function Page({
 }: {
   searchParams?: { url?: string };
 }) {
+  // user id
   const { userId }: { userId: string | null } = auth();
   if (!userId) redirect('/sign-in');
 

@@ -1,9 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
+
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useSignUp } from '@clerk/nextjs';
-import { useState } from 'react';
 
 type Props = {
   setVerifying: (val: boolean) => void;
