@@ -8,7 +8,7 @@ export default function ModerationDashboard({
   firstname: string;
 }) {
   return (
-    <section id='comment-system' className='mt-8 border rounded p-2'>
+    <section id='comment-system' className='mt-4 border rounded p-2'>
       <h1>Moderation dashboard</h1>
       <p>
         New comments <span className='self-center mx-2'>&#8226;</span>{' '}

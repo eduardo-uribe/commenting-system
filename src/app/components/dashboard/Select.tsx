@@ -1,51 +1,47 @@
 'use client';
-import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-export function Select({
+export default function Select({
   registered_websites,
+  site,
 }: {
   registered_websites: Record<string, any>[];
+  site: string | undefined;
 }) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
+  const router = useRouter();
 
   function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    const websiteId = event.target.value;
-    const params = new URLSearchParams(searchParams);
+    const dashboard_id = event.target.value;
 
-    if (websiteId) {
-      params.set('url', websiteId);
+    if (dashboard_id) {
+      router.push(`/dashboard/${dashboard_id}?view=dashboard`);
     } else {
-      params.delete('url');
+      router.push('/dashboard/');
     }
-
-    replace(`${pathname}?${params.toString()}`);
   }
 
   return (
-    <>
-      <select
-        name='domains'
-        id='domain-select'
-        className='mt-1 p-2 border rounded font-sans bg-transparent'
-        onChange={handleChange}
-      >
-        <option value='' className='font-sans bg-transparent'>
-          Select your website
-        </option>
-        {registered_websites.map((website) => {
-          return (
-            <option
-              value={website.website_id}
-              key={website.website_id}
-              className='font-sans bg-transparent'
-            >
-              {website.website_url}
-            </option>
-          );
-        })}
-      </select>
-    </>
+    <select
+      name='domains'
+      id='domain-select'
+      className='mt-4 p-2 border rounded font-sans bg-transparent text-base text-[#8C8C8D]'
+      onChange={handleChange}
+      defaultValue={site}
+    >
+      <option value='' className='font-sans bg-transparent'>
+        Select a dashboard
+      </option>
+      {registered_websites.map((website) => {
+        return (
+          <option
+            value={website.website_id}
+            key={website.website_id}
+            className='font-sans bg-transparent'
+          >
+            {website.website_url}
+          </option>
+        );
+      })}
+    </select>
   );
 }

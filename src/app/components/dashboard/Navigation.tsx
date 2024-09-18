@@ -15,14 +15,6 @@ export default function Navigation() {
           </Link>
         </li>
         <li>
-          <Link
-            href='/dashboard/create-a-new-dashboard'
-            className='text-[#8C8C8D] mr-4 hover:underline'
-          >
-            New Dashboard
-          </Link>
-        </li>
-        <li>
           <SignOutButton>
             <a className='text-[#8C8C8D] hover:underline cursor-pointer'>
               Sign out

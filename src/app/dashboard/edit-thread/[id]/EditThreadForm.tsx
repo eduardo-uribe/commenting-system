@@ -1,6 +1,4 @@
-'use client';
-
-import { update, delete_thread } from '@/actions/edit-thread';
+import { update } from '@/actions/edit-thread';
 
 interface Thread {
   thread_id: number;
@@ -11,12 +9,12 @@ interface Thread {
 }
 
 export default function EditThreadForm({ thread }: { thread: Thread }) {
+  const update_thread = update.bind(null, thread.thread_id);
+
   return (
-    <form action={update} className='border rounded p-2'>
+    <form action={update_thread} className='border rounded p-2'>
       <h1 className='font-medium mb-1'>Edit this thread</h1>
-      <p className='mb-4 text-[#8C8C8D]'>
-        Update the thread name or delete the thread entirely.
-      </p>
+      <p className='mb-4 text-[#8C8C8D]'>Update the thread name</p>
 
       <label htmlFor='thread_id' className='block text-sm font-medium mt-4'>
         Identification number
@@ -43,15 +41,6 @@ export default function EditThreadForm({ thread }: { thread: Thread }) {
 
       <button className='border rounded py-1 px-4 mr-2 bg-[#eee]' type='submit'>
         Save
-      </button>
-      <button
-        className='border rounded py-1 px-4 hover:bg-[#FCD4D5]'
-        onClick={async (event) => {
-          await delete_thread();
-        }}
-        type='button'
-      >
-        Delete
       </button>
     </form>
   );
