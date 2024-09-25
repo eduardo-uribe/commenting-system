@@ -2,7 +2,7 @@ import {
   create_nested_comments_data_structure,
   read_thread_comments,
 } from '@/app/helper/database';
-import { valid_api_key } from '@/app/helper/access-policy';
+import { valid_origin } from '@/app/helper/access-policy';
 import { headers } from 'next/headers';
 
 type Comment = {
@@ -23,13 +23,9 @@ export async function GET(
     const origin = headers().get('origin');
     if (!origin) return new Response(null, { status: 403 });
 
-    const api_key = headers().get('x-api-key');
-    if (!api_key) return new Response(null, { status: 403 });
+    const valid_request_origin = await valid_origin(origin);
 
-    // authenticate api key provided by the client request object
-    const valid_key = await valid_api_key(origin, api_key);
-
-    if (valid_key) {
+    if (valid_request_origin) {
       // return a nested comments data structure that belong to the provided thread id
       const data = await read_thread_comments(Number(params.id));
       const comments = create_nested_comments_data_structure(data as Comment[]);
