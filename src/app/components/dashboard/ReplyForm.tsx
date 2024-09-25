@@ -15,8 +15,7 @@ export default function ReplyForm({
   comment_parent_id: number;
   comment_thread_id: number;
 }) {
-  const replyToComment = reply;
-  const replyToParentComment = replyToComment.bind(
+  const reply_to_comment = reply.bind(
     null,
     comment_parent_id,
     comment_thread_id
@@ -25,7 +24,7 @@ export default function ReplyForm({
   return (
     <form
       className='border rounded-[0.1rem] p-[0.5rem] mt-4'
-      action={replyToParentComment}
+      action={reply_to_comment}
     >
       <label htmlFor='author' className='block font-medium text-[#8C8C8D] mb-1'>
         Author:

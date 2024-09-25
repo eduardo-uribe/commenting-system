@@ -1,14 +1,14 @@
 'use client';
 
-import { createThread } from '@/actions/dashboard';
+import { create_thread } from '@/actions/dashboard';
 import Link from 'next/link';
 
 export default function ThreadDashboard({
   threads,
-  websiteId,
+  domain_id,
 }: {
   threads: Record<string, any>[] | undefined;
-  websiteId: string;
+  domain_id: string;
 }) {
   return (
     <section id='comment-system' className='mt-4 border rounded p-2'>
@@ -16,7 +16,7 @@ export default function ThreadDashboard({
         <h1>Threads dashboard</h1>
         <button
           className='text-sm border rounded py-1 px-2 hover:bg-[#fafafa]'
-          onClick={() => createThread(websiteId)}
+          onClick={() => create_thread(domain_id)}
         >
           Create new thread
         </button>

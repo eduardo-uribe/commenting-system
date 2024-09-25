@@ -2,10 +2,10 @@
 import { useRouter } from 'next/navigation';
 
 export default function Select({
-  registered_websites,
+  domains,
   site,
 }: {
-  registered_websites: Record<string, any>[];
+  domains: any;
   site: string | undefined;
 }) {
   const router = useRouter();
@@ -31,14 +31,14 @@ export default function Select({
       <option value='' className='font-sans bg-transparent'>
         Select a dashboard
       </option>
-      {registered_websites.map((website) => {
+      {domains.map((domain: any) => {
         return (
           <option
-            value={website.website_id}
-            key={website.website_id}
+            value={domain.domain_id}
+            key={domain.domain_id}
             className='font-sans bg-transparent'
           >
-            {website.website_url}
+            {domain.domain_address}
           </option>
         );
       })}

@@ -1,44 +1,31 @@
-import { neon } from '@neondatabase/serverless';
-
-async function create(comment: any) {
-  const sql = neon(process.env.DATABASE_URL as string);
-
-  const response = await sql(
-    `INSERT INTO comment (
-        comment_author,
-        comment_parent_id,
-        comment_thread_id,
-        comment_content)
-    VALUES ($1, $2, $3, $4)`,
-    [
-      comment.comment_author,
-      comment.comment_parent_id,
-      comment.comment_thread_id,
-      comment.comment_content,
-    ]
-  );
-
-  return response;
-}
+import { create_new_comment } from '@/app/helper/database';
+import { valid_api_key } from '@/app/helper/access-policy';
+import { headers } from 'next/headers';
 
 // create a new comment
 export async function POST(request: Request) {
   try {
-    let comment = await request.json();
-    await create(comment);
+    const origin = headers().get('origin');
+    if (!origin) return new Response(null, { status: 403 });
 
-    // return Response.json({ message: 'comment created' });
-    return new Response('comment created', {
-      status: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      },
-    });
+    const api_key = headers().get('x-api-key');
+    if (!api_key) return new Response(null, { status: 403 });
+
+    // authenticate api key provided by the client request object
+    const valid_key = await valid_api_key(origin, api_key);
+
+    if (valid_key) {
+      let comment = await request.json();
+      await create_new_comment(comment);
+
+      return new Response('comment created', {
+        status: 200,
+      });
+    } else {
+      return new Response(null, { status: 403 });
+    }
   } catch (error) {
-    console.log(error);
-    return Response.json('error in comment endpoint', { status: 500 });
+    return new Response(null, { status: 500 });
   }
 }
 

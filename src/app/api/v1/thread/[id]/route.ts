@@ -1,24 +1,9 @@
-import { neon } from '@neondatabase/serverless';
-
-async function readComments(thread_id: number) {
-  const sql = neon(process.env.DATABASE_URL as string);
-  const response = await sql(
-    `SELECT
-      comment_id,
-      comment_author,
-      comment_parent_id,
-      comment_thread_id,
-      comment_content,
-      TO_CHAR(comment_date_created, 'Day,Month FMDD YYYY') AS comment_date_created,
-      TO_CHAR(comment_date_updated, 'Day,Month FMDD YYYY') AS comment_date_updated
-    FROM comment 
-    WHERE comment_thread_id = ($1)
-    ORDER BY comment_date_created ASC`,
-    [thread_id]
-  );
-
-  return response;
-}
+import {
+  create_nested_comments_data_structure,
+  read_thread_comments,
+} from '@/app/helper/database';
+import { valid_api_key } from '@/app/helper/access-policy';
+import { headers } from 'next/headers';
 
 type Comment = {
   comment_id: string;
@@ -30,42 +15,31 @@ type Comment = {
   comment_replies: Comment[];
 };
 
-function buildNestedComments(comments: Comment[]) {
-  const commentMap: any = {};
-  const nestedComments: Comment[] = [];
-
-  // Initialize map and attach children array to each comment
-  comments.forEach((comment: Comment) => {
-    comment.comment_replies = [];
-    commentMap[comment.comment_id] = comment;
-  });
-
-  // Build the tree
-  comments.forEach((comment) => {
-    if (comment.comment_parent_id) {
-      // If the comment has a parent, attach it to the parent's children array
-      const parent = commentMap[comment.comment_parent_id];
-      if (parent) {
-        parent.comment_replies.push(comment);
-      }
-    } else {
-      // If no parent_id, it's a root comment
-      nestedComments.push(comment);
-    }
-  });
-
-  return nestedComments;
-}
-
 export async function GET(
   request: Request,
   { params }: { params: { id: number } }
 ) {
-  // return a nested comments data structure that belong to the provided thread id
-  const data = await readComments(params.id);
-  const comments = buildNestedComments(data as Comment[]);
+  try {
+    const origin = headers().get('origin');
+    if (!origin) return new Response(null, { status: 403 });
 
-  return Response.json(comments);
+    const api_key = headers().get('x-api-key');
+    if (!api_key) return new Response(null, { status: 403 });
+
+    // authenticate api key provided by the client request object
+    const valid_key = await valid_api_key(origin, api_key);
+
+    if (valid_key) {
+      // return a nested comments data structure that belong to the provided thread id
+      const data = await read_thread_comments(Number(params.id));
+      const comments = create_nested_comments_data_structure(data as Comment[]);
+      return Response.json(comments);
+    } else {
+      return new Response(null, { status: 403 });
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function OPTIONS(request: Request) {

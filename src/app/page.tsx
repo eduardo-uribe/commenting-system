@@ -6,11 +6,6 @@ export default function Page() {
       <p>Commenting System</p>
       <ul className='pt-2 flex'>
         <li>
-          <Link href='/blog' className='mr-4 text-gray-500 text-sm'>
-            Blog
-          </Link>
-        </li>
-        <li>
           <Link href='/sign-in' className='mr-4 text-gray-500 text-sm'>
             Sign in
           </Link>

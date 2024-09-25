@@ -40,3 +40,6 @@ example.http
 
 .env.development
 .env.production
+
+# local sqlite database
+database.sqlite

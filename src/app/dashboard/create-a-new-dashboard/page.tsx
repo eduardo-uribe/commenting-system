@@ -1,10 +1,9 @@
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
-import { neon } from '@neondatabase/serverless';
 
 import Link from 'next/link';
 import Form from './Form';
-import { createWebsite } from '@/actions/dashboard';
+import { create_domain } from '@/actions/dashboard';
 
 export default function Page() {
   // api key
@@ -15,7 +14,7 @@ export default function Page() {
   if (!userId) redirect('/sign-in');
 
   // server action to register a new website
-  const register = createWebsite.bind(null, userId);
+  const register = create_domain.bind(null, userId);
 
   return (
     <main className='max-w-[42ch] m-auto mt-24'>

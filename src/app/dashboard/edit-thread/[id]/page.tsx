@@ -1,6 +1,7 @@
-import { neon } from '@neondatabase/serverless';
 import EditThreadForm from './EditThreadForm';
 import Link from 'next/link';
+
+import { read_thread } from '@/app/helper/database';
 
 interface Thread {
   thread_id: number;
@@ -41,23 +42,5 @@ export default async function Page({ params }: { params: { id: string } }) {
         </p>
       </main>
     );
-  }
-}
-
-// read thread metadata
-async function read_thread(thread_id: number) {
-  try {
-    const sql = neon(process.env.DATABASE_URL!);
-
-    const result = await sql(
-      `SELECT * FROM thread WHERE thread.thread_id = $1`,
-      [thread_id]
-    );
-
-    const thread_metadata = result[0];
-
-    return thread_metadata;
-  } catch (error) {
-    console.log(error);
   }
 }
