@@ -34,7 +34,7 @@ export async function valid_api_key(
 export async function valid_origin(domain: string): Promise<boolean> {
   try {
     const { rows } = await turso.execute({
-      sql: `SELECT * FROM domain WHERE domain.domain_address = ?`,
+      sql: `SELECT * FROM domain WHERE domain_address = ?`,
       args: [domain],
     });
 
