@@ -12,7 +12,7 @@ type Comment = {
 
 type NewComment = {
   comment_author: string;
-  comment_parent_id: number | null;
+  comment_parent_id: number;
   comment_thread_id: number;
   comment_content: string;
 };

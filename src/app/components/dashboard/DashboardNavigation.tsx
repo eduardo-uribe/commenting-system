@@ -9,8 +9,6 @@ export default function DashboardNavigation() {
   const { replace } = useRouter();
 
   const view = searchParams.get('view');
-  console.log('VIEW');
-  console.log(view);
 
   function handleChange(view: string) {
     const params = new URLSearchParams(searchParams);

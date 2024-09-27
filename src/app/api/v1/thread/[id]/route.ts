@@ -21,7 +21,7 @@ export async function GET(
 ) {
   try {
     const origin = headers().get('origin');
-    if (!origin) return new Response(null, { status: 403 });
+    if (!origin) return new Response('no origin found', { status: 403 });
 
     const valid_request_origin = await valid_origin(origin);
 
