@@ -3,7 +3,12 @@ import Link from 'next/link';
 export default function Page() {
   return (
     <main className='max-w-[52ch] m-auto pt-24 mb-24'>
-      <p>Commenting System</p>
+      <p>
+        Commenting System{' '}
+        <span className='px-2 py-[4px] bg-black text-white rounded text-xs ml-2'>
+          Beta
+        </span>
+      </p>
       <ul className='pt-2 flex'>
         <li>
           <Link href='/sign-in' className='mr-4 text-gray-500 text-sm'>
