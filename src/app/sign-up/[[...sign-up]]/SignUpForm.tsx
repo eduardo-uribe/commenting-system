@@ -94,7 +94,7 @@ function SignUpForm({ setVerifying }: Props) {
             checked
           />
           <label htmlFor='essential' className='text-sm'>
-            Essentials $10/mo
+            Author $10.00/year
           </label>
         </div>
 
