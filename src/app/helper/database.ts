@@ -86,7 +86,7 @@ export async function read_domains(userId: string) {
   }
 }
 
-export async function read_comments(userId: number) {
+export async function read_comments(domain_id: number) {
   try {
     const { rows } = await turso.execute({
       sql: `SELECT
@@ -103,12 +103,12 @@ export async function read_comments(userId: number) {
         WHERE thread_owner_id = (
           SELECT domain_id
           FROM domain
-          WHERE domain_id = 1
+          WHERE domain_id = ?
         )
       )
       AND comment_accepted = 'false'
       ORDER BY comment_date_created DESC;`,
-      args: [],
+      args: [domain_id],
     });
 
     const comments = rows?.map((row) => {
@@ -181,6 +181,29 @@ export async function read_thread_comments(thread_id: number) {
     });
 
     return comments;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function read_public_api_key(domain_id: number) {
+  try {
+    const { rows } = await turso.execute({
+      sql: `SELECT domain_api_key FROM domain WHERE domain_id = ?`,
+      args: [domain_id],
+    });
+
+    const keys = rows?.map((row) => {
+      const object: any = {};
+      for (const [key, value] of Object.entries(row)) {
+        object[key] = value;
+      }
+      return object;
+    });
+
+    const domain_public_api_key = keys[0].domain_api_key;
+
+    return domain_public_api_key;
   } catch (error) {
     console.log(error);
   }

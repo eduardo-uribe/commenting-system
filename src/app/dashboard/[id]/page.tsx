@@ -7,6 +7,7 @@ import {
   read_domains,
   read_threads,
   read_comments,
+  read_public_api_key,
 } from '@/app/helper/database';
 
 import Select from '@/app/components/dashboard/Select';
@@ -29,15 +30,17 @@ export default async function Page({
   const firstname = user?.firstName || 'Internet stranger';
 
   let domains = await read_domains(userId);
-  let selected_site;
+
   let comments;
   let threads;
+  let public_api_key;
   let domain_id;
 
   if (params?.id) {
     domain_id = params?.id;
     threads = await read_threads(Number(domain_id));
     comments = await read_comments(Number(domain_id));
+    public_api_key = await read_public_api_key(Number(domain_id));
   }
 
   return (
@@ -48,7 +51,7 @@ export default async function Page({
 
       <details className='mt-6'>
         <summary>Public API Key</summary>
-        Public api key:
+        {public_api_key}
       </details>
 
       <section className='mt-10 border rounded p-2'>
