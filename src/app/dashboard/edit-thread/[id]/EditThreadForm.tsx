@@ -13,8 +13,7 @@ export default function EditThreadForm({ thread }: { thread: Thread }) {
 
   return (
     <form action={update_thread} className='border rounded p-2'>
-      <h1 className='font-medium mb-1'>Edit this thread</h1>
-      <p className='mb-4 text-[#8C8C8D]'>Update the thread name</p>
+      <h1 className='font-medium mb-1'>Edit the thread name</h1>
 
       <label htmlFor='thread_id' className='block text-sm font-medium mt-4'>
         Identification number

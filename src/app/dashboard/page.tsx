@@ -19,20 +19,9 @@ export default async function Page() {
     <main className='max-w-[52ch] m-auto pt-24'>
       <Navigation />
 
-      <section className='border rounded p-2 mt-28'>
-        <div className='flex justify-between'>
-          <h2>Dashboard</h2>
-          <Link
-            href='/dashboard/create-a-new-dashboard'
-            className='text-indigo-800 underline underline-offset-4 text-sm'
-          >
-            New Dashboard
-          </Link>
-        </div>
-        {domains && domains.length > 0 && (
-          <Select domains={domains} site={undefined} />
-        )}
-      </section>
+      {domains && domains.length > 0 && (
+        <Select domains={domains} site={undefined} />
+      )}
     </main>
   );
 }

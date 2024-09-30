@@ -1,24 +1,53 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { SignOutButton } from '@clerk/nextjs';
 
 export default function Navigation() {
+  const pathname = usePathname();
+
   return (
     <nav>
-      <p>Comment System</p>
-      <ul className='flex mt-2'>
-        <li className='mr-4'>
+      <p>Commenting System</p>
+
+      <ul className='flex'>
+        <li>
+          <Link
+            href='/dashboard/register-domain'
+            className={`mr-4 ${
+              pathname === '/register-domain' ? 'font-semibold underline' : ''
+            }`}
+          >
+            Register domain
+          </Link>
+        </li>
+        <li>
           <Link
             href='/dashboard/documentation'
-            className='hover:underline text-[#8C8C8D]'
+            className={`mr-4 ${
+              pathname === '/dashboard/documentation'
+                ? 'font-semibold underline'
+                : ''
+            }`}
           >
             Documentation
           </Link>
         </li>
         <li>
+          <Link
+            href='/dashboard'
+            className={`mr-4 ${
+              pathname === '/dashboard' ? 'font-semibold underline' : ''
+            }`}
+          >
+            Dashboard
+          </Link>
+        </li>
+
+        <li>
           <SignOutButton>
-            <a className='text-[#8C8C8D] hover:underline cursor-pointer'>
-              Sign out
-            </a>
+            <a className='cursor-pointer'>Sign out</a>
           </SignOutButton>
         </li>
       </ul>

@@ -44,20 +44,24 @@ export default async function Page({
     <main className='max-w-[52ch] m-auto pt-24'>
       <Navigation />
 
-      <section className='border rounded p-2 mt-28'>
-        <div className='flex justify-between'>
-          <h2 className='font-medium'>Dashboard</h2>
-          <Link
-            href='/dashboard/create-a-new-dashboard'
-            className='text-indigo-800 underline underline-offset-4 text-sm'
-          >
-            New Dashboard
-          </Link>
-        </div>
-        <Select domains={domains} site={params?.id} />
+      <Select domains={domains} site={params?.id} />
 
-        {params?.id && <DashboardNavigation />}
-        {searchParams.view === 'dashboard' && (
+      <details className='mt-6'>
+        <summary>Public API Key</summary>
+        Public api key:
+      </details>
+
+      <section className='mt-10 border rounded p-2'>
+        <div className='mb-4'>
+          <Link href='?view=moderation' className='mr-2'>
+            Moderation
+          </Link>
+          <span className='mr-2'>&#x2022;</span>
+          <Link href='?view=threads'>Threads</Link>
+        </div>
+
+        {/* {params?.id && <DashboardNavigation />} */}
+        {searchParams.view === 'moderation' && (
           <ModerationDashboard comments={comments} firstname={firstname} />
         )}
         {searchParams.view === 'threads' && (

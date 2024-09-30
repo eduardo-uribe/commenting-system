@@ -8,8 +8,7 @@ export default function ModerationDashboard({
   firstname: string;
 }) {
   return (
-    <section id='comment-system' className='mt-4 border rounded p-2'>
-      <h1>Moderation dashboard</h1>
+    <div>
       <p>
         New comments <span className='self-center mx-2'>&#8226;</span>{' '}
         {comments && comments.length}
@@ -28,6 +27,6 @@ export default function ModerationDashboard({
           })}
         </ul>
       )}
-    </section>
+    </div>
   );
 }

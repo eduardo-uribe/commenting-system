@@ -11,9 +11,13 @@ export default function ThreadDashboard({
   domain_id: string;
 }) {
   return (
-    <section id='comment-system' className='mt-4 border rounded p-2'>
+    <div>
       <div className='flex justify-between'>
-        <h1>Threads dashboard</h1>
+        <p>
+          Threads <span className='self-center mx-2'>&#8226;</span>
+          {threads && threads.length}
+        </p>
+
         <button
           className='text-sm border rounded py-1 px-2 hover:bg-[#fafafa]'
           onClick={() => create_thread(domain_id)}
@@ -22,24 +26,15 @@ export default function ThreadDashboard({
         </button>
       </div>
 
-      <p>
-        Threads <span className='self-center mx-2'>&#8226;</span>
-        {threads && threads.length}
-      </p>
-
       {threads && threads.length > 0 && (
         <ul className='list-none mt-8 p-0' id='thread-section'>
-          <li className='border rounded py-1 px-2 mb-2 flex'>
-            <p className='mr-6'>Id</p>
-            <p>Name</p>
-          </li>
           {threads.map((thread) => {
             return (
               <li
                 key={thread.thread_id}
                 className='border rounded py-1 px-2 mb-2 flex'
               >
-                <p className='mr-6 font-medium'>{thread.thread_id}</p>
+                <p className='mr-6 font-medium'>Id# {thread.thread_id}</p>
                 <p className='mr-6 font-medium'>{thread.thread_name}</p>
                 <Link
                   href={`/dashboard/edit-thread/${thread.thread_id}`}
@@ -58,6 +53,6 @@ export default function ThreadDashboard({
           })}
         </ul>
       )}
-    </section>
+    </div>
   );
 }

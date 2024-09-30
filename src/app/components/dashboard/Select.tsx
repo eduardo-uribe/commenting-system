@@ -21,27 +21,32 @@ export default function Select({
   }
 
   return (
-    <select
-      name='domains'
-      id='domain-select'
-      className='mt-4 p-2 border rounded font-sans bg-transparent text-base text-[#8C8C8D]'
-      onChange={handleChange}
-      defaultValue={site}
-    >
-      <option value='' className='font-sans bg-transparent'>
-        Select a dashboard
-      </option>
-      {domains.map((domain: any) => {
-        return (
-          <option
-            value={domain.domain_id}
-            key={domain.domain_id}
-            className='font-sans bg-transparent'
-          >
-            {domain.domain_address}
-          </option>
-        );
-      })}
-    </select>
+    <div className='mt-12'>
+      <label htmlFor='domains' className='mr-2'>
+        Domain:
+      </label>
+      <select
+        name='domains'
+        id='domain-select'
+        className='p-2 rounded'
+        onChange={handleChange}
+        defaultValue={site}
+      >
+        <option value='' className='font-sans'>
+          Select a domain
+        </option>
+        {domains.map((domain: any) => {
+          return (
+            <option
+              value={domain.domain_id}
+              key={domain.domain_id}
+              className='font-sans'
+            >
+              {domain.domain_address}
+            </option>
+          );
+        })}
+      </select>
+    </div>
   );
 }
